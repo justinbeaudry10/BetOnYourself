@@ -1,0 +1,19 @@
+{
+  "name": "betonyourself",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justinbeaudry10/BetOnYourself.git"
+  },
+  "author": "Justin Beaudry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/justinbeaudry10/BetOnYourself/issues"
+  },
+  "homepage": "https://github.com/justinbeaudry10/BetOnYourself#readme"
+}
