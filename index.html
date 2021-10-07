@@ -74,6 +74,8 @@
                             </div>
                             <div class="my-4 add-bet-container d-none">
                                 <form class="add-bet">
+                                    <label for="sportsbook">Sportsbook</label>
+                                    <input value="" type="text" id="sportsbook" placeholder="Sportsbook">
                                     <label for="league">League</label>
                                     <select id="league">
                                         <option value="MLB">MLB</option>
@@ -82,9 +84,19 @@
                                         <option value="NHL">NHL</option>
                                         <option value="UFC">UFC</option>
                                     </select>
+                                    <label for="event">Event</label>
                                     <input type="text" id="event" placeholder="Event">
-                                    <input value="" type="text" id="selection" placeholder="Selection">
+                                    <label for="selection">Selection</label>
+                                    <input value="" type="text" id="selection" placeholder="Selection">                        
+                                    <label for="style">Style</label>
+                                    <select id="style">
+                                        <option value="American">American (+200)</option>
+                                        <option value="Decimal">Decimal (2.00)</option>
+                                        <option value="Fractional">Fractional (2/1)</option>
+                                    </select>
+                                    <label for="odds">Odds</label>
                                     <input value="" type="text" id="odds" placeholder="Odds">
+                                    <label for="Risk">Risk</label>
                                     <input value="" type="text" id="risk" placeholder="Risk">
                                     <button class="btn btn-confirm-bet">Confirm</button>
                                     <button class="btn btn-cancel"">Cancel</button>
@@ -93,7 +105,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xl-3 col-md-6">
-                                <div class="card bg-success text-white mb-4">
+                                <div class="card bg-green text-white mb-4">
                                     <div class="card-title">Bets Won</div>
                                     <div class="card-body">
                                         10
@@ -105,7 +117,7 @@
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
-                                <div class="card bg-danger text-white mb-4">
+                                <div class="card bg-red text-white mb-4">
                                     <div class="card-title">Bets Lost</div>
                                     <div class="card-body">
                                         10
@@ -117,7 +129,7 @@
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
-                                <div class="card bg-warning text-white mb-4">
+                                <div class="card bg-yellow text-white mb-4">
                                     <div class="card-title">Voided Bets</div>
                                     <div class="card-body">
                                         10
@@ -129,7 +141,7 @@
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
-                                <div class="card bg-primary text-white mb-4">
+                                <div class="card bg-blue text-white mb-4">
                                     <div class="card-title">Cashed Out</div>
                                     <div class="card-body">
                                         10
@@ -142,8 +154,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xl-3 col-md-3">
-                                <div class="card bg-success text-white mb-4">
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-green text-white mb-4">
                                     <div class="card-title">Win %</div>
                                     <div class="card-body">
                                         10
@@ -154,8 +166,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-3">
-                                <div class="card bg-success text-white mb-4">
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-green text-white mb-4">
                                     <div class="card-title">Profit / Loss</div>
                                     <div class="card-body">
                                         10
@@ -166,9 +178,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-3">
-                                <div class="card bg-success text-white mb-4">
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-grey text-white mb-4">
                                     <div class="card-title">Current ROI</div>
+                                    <div class="card-body">
+                                        10
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-black text-white mb-4">
+                                    <div class="card-title">Parlays Won</div>
                                     <div class="card-body">
                                         10
                                     </div>
@@ -208,6 +232,7 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
+                                            <th>Sportsbook</th>
                                             <th>League</th>
                                             <th>Event</th>
                                             <th>Selection</th>

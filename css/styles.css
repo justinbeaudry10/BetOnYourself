@@ -8315,7 +8315,7 @@ fieldset:disabled .btn {
   --bs-text-opacity: 1;
 }
 
-.bg-primary {
+.bg-blue {
   --bs-bg-opacity: 1;
   background-color: rgba(
     var(--bs-primary-rgb),
@@ -8323,7 +8323,7 @@ fieldset:disabled .btn {
   ) !important;
 }
 
-.bg-secondary {
+.bg-grey {
   --bs-bg-opacity: 1;
   background-color: rgba(
     var(--bs-secondary-rgb),
@@ -8331,7 +8331,7 @@ fieldset:disabled .btn {
   ) !important;
 }
 
-.bg-success {
+.bg-green {
   --bs-bg-opacity: 1;
   background-color: rgba(
     var(--bs-success-rgb),
@@ -8344,7 +8344,7 @@ fieldset:disabled .btn {
   background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity)) !important;
 }
 
-.bg-warning {
+.bg-yellow {
   --bs-bg-opacity: 1;
   background-color: rgba(
     var(--bs-warning-rgb),
@@ -8352,7 +8352,7 @@ fieldset:disabled .btn {
   ) !important;
 }
 
-.bg-danger {
+.bg-red {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-danger-rgb), var(--bs-bg-opacity)) !important;
 }

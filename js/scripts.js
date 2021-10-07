@@ -17,6 +17,7 @@ const btnConfirm = document.querySelector(".btn-confirm-bet");
 const btnCancel = document.querySelector(".btn-cancel");
 const addBetContainer = document.querySelector(".add-bet-container");
 const addBetForm = document.querySelector(".add-bet");
+const sportsbook = document.querySelector("#sportsbook");
 const league = document.querySelector("#league");
 const sportEvent = document.querySelector("#event");
 const selection = document.querySelector("#selection");
@@ -26,9 +27,10 @@ const recentBetsTable = document.querySelector("#datatablesSimple");
 
 // Functions
 
-function addNewBet(lg, ev, sl, odd, risk) {
+function addNewBet(sb, lg, ev, sl, odd, risk) {
   let markup = `
   <tr>
+    <td>${sb}</td>
     <td>${lg}</td>
     <td>${ev}</td>
     <td>${sl}</td>
@@ -53,14 +55,15 @@ btnCancel.addEventListener("click", (e) => {
 });
 
 btnConfirm.addEventListener("click", (e) => {
+  e.preventDefault();
+  let curBook = sportsbook.value;
   let curLeague = league.options[league.selectedIndex].value;
   let curEvent = sportEvent.value;
   let curSelection = selection.value;
   let curOdds = odds.value;
   let curRisk = risk.value;
-  addNewBet(curLeague, curEvent, curSelection, curOdds, curRisk);
+  addNewBet(curBook, curLeague, curEvent, curSelection, curOdds, curRisk);
   addBetContainer.classList.add("d-none");
-  location.reload();
 });
 
 window.addEventListener("DOMContentLoaded", (event) => {
