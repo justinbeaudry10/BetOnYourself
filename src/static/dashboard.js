@@ -4,42 +4,62 @@
  * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-sb-admin/blob/master/LICENSE)
  */
 
-window.addEventListener("DOMContentLoaded", (event) => {
-  // Classes
-  class Bet {
-    constructor(sb, lg, ev, sl, style, odd, risk, status = "Unsettled") {
-      this.book = sb;
-      this.league = lg;
-      this.event = ev;
-      this.selection = sl;
-      this.risk = risk;
-      this.status = status;
+// class Bet {
+//   constructor(sb, lg, ev, sl, style, odd, risk, status = "Unsettled") {
+//     this.book = sb;
+//     this.league = lg;
+//     this.event = ev;
+//     this.selection = sl;
+//     this.risk = risk;
+//     this.status = status;
 
-      // Odds are stored in decimal format
-      switch (style) {
-        case "American":
-          let mult = +odd.slice(1, odd.length);
-          if (odd[0] === "+") {
-            this.odds = (mult / 100 + 1).toFixed(2);
-          } else if (odd[0] === "-") {
-            this.odds = (100 / mult + 1).toFixed(2);
-          }
-          break;
-        case "Decimal":
-          this.odds = (+odd).toFixed(2);
-          break;
-        case "Fractional":
-          let nums = odd.split("/");
-          this.odds = (+nums[0] / +nums[1] + 1).toFixed(2);
-          break;
-      }
-    }
+//     // Odds are stored in decimal format
+//     switch (style) {
+//       case "American":
+//         let mult = +odd.slice(1, odd.length);
+//         if (odd[0] === "+") {
+//           this.odds = (mult / 100 + 1).toFixed(2);
+//         } else if (odd[0] === "-") {
+//           this.odds = (100 / mult + 1).toFixed(2);
+//         }
+//         break;
+//       case "Decimal":
+//         this.odds = (+odd).toFixed(2);
+//         break;
+//       case "Fractional":
+//         let nums = odd.split("/");
+//         this.odds = (+nums[0] / +nums[1] + 1).toFixed(2);
+//         break;
+//     }
+//   }
 
-    setStatus(newStatus) {
-      this.status = newStatus;
-    }
+//   setStatus(newStatus) {
+//     this.status = newStatus;
+//   }
+// }
+
+let xReq = new XMLHttpRequest();
+
+xReq.onreadystatechange = function () {
+  // If the xReq is finished and the status is OK, display the questions
+  if (this.readyState == 4 && this.status == 200) {
+    // Gets data from server
+    let data = JSON.parse(this.responseText);
+
+    $(document).ready(function () {
+      console.log(data);
+      $("#current-user").text(data.fullName);
+    });
   }
+};
 
+// GET /questions asynchronously
+xReq.open("GET", "/accountInfo", true);
+
+// Send the xReq
+xReq.send();
+
+window.addEventListener("DOMContentLoaded", (event) => {
   // Data
 
   const betsData = [];
@@ -49,7 +69,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
   const btnAddBet = document.querySelector(".btn-add-bet");
   const btnConfirm = document.querySelector(".btn-confirm-bet");
   const btnCancel = document.querySelector(".btn-cancel");
-  const addBetContainer = document.querySelector(".add-bet-container");
   const addBetForm = document.querySelector(".add-bet");
   const sportsbook = document.querySelector("#sportsbook");
   const league = document.querySelector("#league");
@@ -104,11 +123,14 @@ window.addEventListener("DOMContentLoaded", (event) => {
   updateStatusArr(); // Populates array with initial values already in table
 
   btnAddBet.addEventListener("click", (e) => {
-    addBetContainer.classList.remove("d-none");
+    addBetForm.classList.remove("d-none");
+    btnAddBet.classList.add("d-none");
   });
 
   btnCancel.addEventListener("click", (e) => {
-    addBetContainer.classList.add("d-none");
+    e.preventDefault();
+    addBetForm.classList.add("d-none");
+    btnAddBet.classList.remove("d-none");
   });
 
   btnConfirm.addEventListener("click", (e) => {

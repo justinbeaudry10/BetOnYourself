@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/justinbeaudry10/BetOnYourself/issues"
   },
-  "homepage": "https://github.com/justinbeaudry10/BetOnYourself#readme"
+  "homepage": "https://github.com/justinbeaudry10/BetOnYourself#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "mysql": "^2.18.1",
+    "node": "^17.3.0"
+  }
 }

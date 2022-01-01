@@ -4929,9 +4929,6 @@ fieldset:disabled .btn {
 .card-body {
   flex: 1 1 auto;
   padding: 1rem 1rem;
-  font-size: 2.5rem;
-  font-weight: bold;
-  text-align: center;
 }
 
 .card-title {
@@ -12232,4 +12229,10 @@ body {
 
 .void {
   background-color: rgba(100, 100, 100, 0.5);
+}
+
+.add-bet {
+  background-color: var(--bs-gray-500);
+  border-radius: 1rem;
+  border: 1px solid black;
 }

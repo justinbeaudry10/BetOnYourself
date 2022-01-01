@@ -16,8 +16,7 @@
         <script defer src="assets/demo/chart-area-demo.js"></script>
         <script defer src="assets/demo/chart-bar-demo.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-        <script defer src="js/datatables-simple-demo.js"></script>
-        <script defer src="js/scripts.js"></script>
+        <script defer src="dashboard.js"></script>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -66,7 +65,7 @@
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        <div id="current-user"></div>
                     </div>
                 </nav>
             </div>
@@ -74,12 +73,10 @@
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Dashboard</h1>
-                        <div class="row">
-                            <div class="my-4">
+                        <div class="row">                            
+                            <div class="my-4 add-bet-container">
                                 <button class="btn btn-add-bet">+ Add Bet</button>
-                            </div>
-                            <div class="my-4 add-bet-container d-none">
-                                <form class="add-bet">
+                                <form class="add-bet d-none">
                                     <label for="sportsbook">Sportsbook</label>
                                     <input value="" type="text" id="sportsbook" placeholder="Sportsbook">
                                     <label for="league">League</label>
