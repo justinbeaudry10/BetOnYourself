@@ -16,7 +16,7 @@
         <script defer src="assets/demo/chart-area-demo.js"></script>
         <script defer src="assets/demo/chart-bar-demo.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-        <script defer src="dashboard.js"></script>
+        <script type="module" defer src="dashboard.js"></script>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -26,10 +26,10 @@
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-                <div class="input-group">
+                <!-- <div class="input-group">
                     <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
                     <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-                </div>
+                </div> -->
             </form>
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
@@ -78,9 +78,9 @@
                                 <button class="btn btn-add-bet">+ Add Bet</button>
                                 <form class="add-bet d-none">
                                     <label for="sportsbook">Sportsbook</label>
-                                    <input value="" type="text" id="sportsbook" placeholder="Sportsbook">
+                                    <input value="" type="text" id="sportsbook" placeholder="FanDuel" required>
                                     <label for="league">League</label>
-                                    <select id="league">
+                                    <select id="league" required>
                                         <option disabled selected value>---</option>
                                         <option value="MLB">MLB</option>
                                         <option value="NBA">NBA</option>
@@ -89,19 +89,24 @@
                                         <option value="UFC">UFC</option>
                                     </select>
                                     <label for="event">Event</label>
-                                    <input type="text" id="event" placeholder="Event">
+                                    <input type="text" id="event" placeholder="GS @ TOR" required>
                                     <label for="selection">Selection</label>
-                                    <input value="" type="text" id="selection" placeholder="Selection">                        
+                                    <input value="" type="text" id="selection" placeholder="Raptors +3.5" required>                        
                                     <label for="style">Style</label>
-                                    <select id="style">
+                                    <select id="style" required>
                                         <option value="American">American (+200)</option>
                                         <option value="Decimal">Decimal (2.00)</option>
                                         <option value="Fractional">Fractional (2/1)</option>
                                     </select>
                                     <label for="odds">Odds</label>
-                                    <input value="" type="text" id="odds" placeholder="Odds">
+                                    <input value="" type="text" id="odds" required>
                                     <label for="Risk">Risk</label>
-                                    <input value="" type="text" id="risk" placeholder="Risk">
+                                    <input value="" type="text" id="risk" step="0.01" placeholder="5.00" required>
+                                    <label for="result">Result</label>
+                                    <select id="result" required>
+                                        <option value="won">Won</option>
+                                        <option value="lost">Lost</option>
+                                    </select>
                                     <button class="btn btn-confirm-bet">Confirm</button>
                                     <button class="btn btn-cancel"">Cancel</button>
                                 </form>
@@ -111,7 +116,7 @@
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-green text-white mb-4">
                                     <div class="card-title">Bets Won</div>
-                                    <div class="card-body">
+                                    <div class="card-body" id="bets-won">
                                         10
                                     </div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
@@ -123,7 +128,7 @@
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-red text-white mb-4">
                                     <div class="card-title">Bets Lost</div>
-                                    <div class="card-body">
+                                    <div class="card-body" id="bets-lost">
                                         10
                                     </div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
@@ -161,7 +166,7 @@
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-green text-white mb-4">
                                     <div class="card-title">Win %</div>
-                                    <div class="card-body">
+                                    <div class="card-body" id="win-percent">
                                         10
                                     </div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">

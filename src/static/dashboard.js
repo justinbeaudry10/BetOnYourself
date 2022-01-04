@@ -38,27 +38,72 @@
 //   }
 // }
 
-let xReq = new XMLHttpRequest();
+import { AJAX } from "./helpers.js";
 
-xReq.onreadystatechange = function () {
-  // If the xReq is finished and the status is OK, display the questions
-  if (this.readyState == 4 && this.status == 200) {
-    // Gets data from server
-    let data = JSON.parse(this.responseText);
+const data = await AJAX("/accountInfo");
 
-    $(document).ready(function () {
-      console.log(data);
-      $("#current-user").text(data.fullName);
-    });
-  }
-};
+function toggleBetForm() {
+  $(".btn-add-bet").toggleClass("d-none");
+  $(".add-bet").toggleClass("d-none");
+}
 
-// GET /questions asynchronously
-xReq.open("GET", "/accountInfo", true);
+$(document).ready(function () {
+  $("#current-user").text(data.fullName);
+  $("#bets-won").text(data.won);
+  $("#bets-lost").text(data.lost);
+  $("#win-percent").text((data.won / (data.won + data.lost)) * 100);
 
-// Send the xReq
-xReq.send();
+  // Show add bet form
+  $(".btn-add-bet").click(function (e) {
+    e.preventDefault();
+    toggleBetForm();
+  });
 
+  // Hide add bet form
+  $(".btn-cancel").click(function (e) {
+    e.preventDefault();
+    toggleBetForm();
+  });
+
+  // Add bet
+  $(".btn-confirm-bet").click(async function (e) {
+    e.preventDefault();
+    let odds = $("#odds").val();
+
+    // Converts odds to decimal style
+    switch ($("#style option:selected").val()) {
+      case "American":
+        let mult = +odds.slice(1, odds.length);
+        if (odds[0] === "+") {
+          odds = (mult / 100 + 1).toFixed(2);
+        } else if (odds[0] === "-") {
+          odds = (100 / mult + 1).toFixed(2);
+        }
+        break;
+      case "Decimal":
+        odds = (+odds).toFixed(2);
+        break;
+      case "Fractional":
+        let nums = odds.split("/");
+        odds = (+nums[0] / +nums[1] + 1).toFixed(2);
+        break;
+    }
+
+    let newBet = {
+      sportsbook: $("#sportsbook").val(),
+      league: $("#league option:selected").text(),
+      event: $("#event").val(),
+      selection: $("#selection").val(),
+      odds: odds,
+      risk: $("#risk").val(),
+      result: $("#result option:selected").text(),
+    };
+
+    await AJAX("/addBet", newBet);
+  });
+});
+
+/*
 window.addEventListener("DOMContentLoaded", (event) => {
   // Data
 
@@ -172,3 +217,4 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
   }
 });
+*/

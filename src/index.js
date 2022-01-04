@@ -70,12 +70,31 @@ app.get("/accountInfo", (req, res) => {
         for (r of rows) {
           fullName = r.fName + " " + r.lName;
         }
+      }
+    }
+  );
+
+  conn.query(
+    `SELECT * FROM bets WHERE bettor="${req.session.email}"`,
+    (err, rows, fields) => {
+      if (err) console.log(err);
+      else {
+        let won = 0;
+        let lost = 0;
+        let net = 0;
+
+        for (r of rows) {
+          if (r.betStatus === "Won") {
+            won++;
+          } else if (r.betStatus === "Lost") lost++;
+        }
 
         res.json({
           fullName: fullName,
+          won: won,
+          lost: lost,
         });
       }
-      conn.end();
     }
   );
 });
@@ -94,6 +113,19 @@ app.post("/signup", (req, res) => {
         res.send("Account created successfully");
         conn.end();
       }
+    }
+  );
+});
+
+app.post("/addBet", (req, res) => {
+  let conn = newConnection();
+  conn.connect();
+
+  conn.query(
+    `INSERT INTO bets VALUES (null, "${req.body.sportsbook}", "${req.body.league}", "${req.body.event}", "${req.body.selection}", ${req.body.risk}, ${req.body.odds}, CURRENT_DATE, "${req.body.result}", "${req.session.email}")`,
+    (err, rows, fields) => {
+      if (err) res.send(err);
+      else res.json({ result: "Bet added successfully!" });
     }
   );
 });
