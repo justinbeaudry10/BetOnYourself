@@ -113,106 +113,58 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-4 col-md-6">
                                 <div class="card bg-green text-white mb-4">
                                     <div class="card-title">Bets Won</div>
-                                    <div class="card-body" id="bets-won">
+                                    <div class="card-body dashboard-card" id="bets-won">
                                         10
-                                    </div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-4 col-md-6">
                                 <div class="card bg-red text-white mb-4">
                                     <div class="card-title">Bets Lost</div>
-                                    <div class="card-body" id="bets-lost">
+                                    <div class="card-body dashboard-card" id="bets-lost">
                                         10
-                                    </div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-yellow text-white mb-4">
-                                    <div class="card-title">Voided Bets</div>
-                                    <div class="card-body">
-                                        10
-                                    </div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-4 col-md-6">
                                 <div class="card bg-blue text-white mb-4">
                                     <div class="card-title">Cashed Out</div>
-                                    <div class="card-body">
+                                    <div class="card-body dashboard-card">
                                         10
-                                    </div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-4 col-md-6">
                                 <div class="card bg-green text-white mb-4">
                                     <div class="card-title">Win %</div>
-                                    <div class="card-body" id="win-percent">
+                                    <div class="card-body dashboard-card" id="win-percent">
                                         10
-                                    </div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-4 col-md-6">
                                 <div class="card bg-green text-white mb-4">
                                     <div class="card-title">Profit / Loss</div>
-                                    <div class="card-body">
+                                    <div class="card-body dashboard-card" id="profit">
                                         10
-                                    </div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-grey text-white mb-4">
-                                    <div class="card-title">Current ROI</div>
-                                    <div class="card-body">
-                                        10
-                                    </div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-4 col-md-6">
                                 <div class="card bg-black text-white mb-4">
                                     <div class="card-title">Parlays Won</div>
-                                    <div class="card-body">
+                                    <div class="card-body dashboard-card">
                                         10
-                                    </div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row d-none">
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -222,7 +174,7 @@
                                     <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
                                 </div>
                             </div>
-                            <div class="col-xl-6">
+                            <div class="col-xl-6 d-none">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
@@ -248,30 +200,12 @@
                                             <th>Odds</th>
                                             <th>Risk</th>
                                             <th>Return</th>
-                                            <th>ROI</th>
-                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Result</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr class="unsettled">
-                                            <td>bet365</td>
-                                            <td>NBA</td>
-                                            <td>TOR @ PHI</td>
-                                            <td>TOR Raptors +5.5</td>
-                                            <td>-120</td>
-                                            <td>$5.00</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>
-                                              <select class="status-select">
-                                                <option value="unsettled">Unsettled</option>
-                                                <option value="won">Won</option>
-                                                <option value="lost">Lost</option>
-                                                <option value="void">Void</option>
-                                                <option value="cashedOut">Cashed Out</option>
-                                              </select>
-                                            </td>
-                                          </tr>
+                                    <tbody id="table-data">
+                                        
                                     </tbody>
                                 </table>
                             </div>

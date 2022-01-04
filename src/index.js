@@ -79,20 +79,15 @@ app.get("/accountInfo", (req, res) => {
     (err, rows, fields) => {
       if (err) console.log(err);
       else {
-        let won = 0;
-        let lost = 0;
-        let net = 0;
+        let bets = [];
 
         for (r of rows) {
-          if (r.betStatus === "Won") {
-            won++;
-          } else if (r.betStatus === "Lost") lost++;
+          bets.push(r);
         }
 
         res.json({
           fullName: fullName,
-          won: won,
-          lost: lost,
+          bets: bets,
         });
       }
     }

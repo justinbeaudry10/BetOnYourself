@@ -12236,3 +12236,9 @@ body {
   border-radius: 1rem;
   border: 1px solid black;
 }
+
+.dashboard-card {
+  text-align: center;
+  font-weight: bold;
+  font-size: large;
+}

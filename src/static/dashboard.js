@@ -4,40 +4,6 @@
  * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-sb-admin/blob/master/LICENSE)
  */
 
-// class Bet {
-//   constructor(sb, lg, ev, sl, style, odd, risk, status = "Unsettled") {
-//     this.book = sb;
-//     this.league = lg;
-//     this.event = ev;
-//     this.selection = sl;
-//     this.risk = risk;
-//     this.status = status;
-
-//     // Odds are stored in decimal format
-//     switch (style) {
-//       case "American":
-//         let mult = +odd.slice(1, odd.length);
-//         if (odd[0] === "+") {
-//           this.odds = (mult / 100 + 1).toFixed(2);
-//         } else if (odd[0] === "-") {
-//           this.odds = (100 / mult + 1).toFixed(2);
-//         }
-//         break;
-//       case "Decimal":
-//         this.odds = (+odd).toFixed(2);
-//         break;
-//       case "Fractional":
-//         let nums = odd.split("/");
-//         this.odds = (+nums[0] / +nums[1] + 1).toFixed(2);
-//         break;
-//     }
-//   }
-
-//   setStatus(newStatus) {
-//     this.status = newStatus;
-//   }
-// }
-
 import { AJAX } from "./helpers.js";
 
 const data = await AJAX("/accountInfo");
@@ -48,10 +14,71 @@ function toggleBetForm() {
 }
 
 $(document).ready(function () {
+  // Toggle the side navigation
+  const sidebarToggle = document.body.querySelector("#sidebarToggle");
+  if (sidebarToggle) {
+    // Uncomment Below to persist sidebar toggle between refreshes
+    // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+    //     document.body.classList.toggle('sb-sidenav-toggled');
+    // }
+    sidebarToggle.addEventListener("click", (event) => {
+      event.preventDefault();
+      document.body.classList.toggle("sb-sidenav-toggled");
+      localStorage.setItem(
+        "sb|sidebar-toggle",
+        document.body.classList.contains("sb-sidenav-toggled")
+      );
+    });
+  }
+
   $("#current-user").text(data.fullName);
-  $("#bets-won").text(data.won);
-  $("#bets-lost").text(data.lost);
-  $("#win-percent").text((data.won / (data.won + data.lost)) * 100);
+
+  let won = 0;
+  let lost = 0;
+  let profit = 0.0;
+  let tableMarkup;
+
+  data.bets
+    .slice()
+    .reverse()
+    .forEach(function (b) {
+      tableMarkup += `<tr>
+    <td>${b.book}</td>
+    <td>${b.league}</td>
+    <td>${b.betEvent}</td>
+    <td>${b.selection}</td>
+    <td>${b.odds}</td>
+    <td>${"$" + parseFloat(b.stake).toFixed(2)}</td>
+    <td>${
+      b.betStatus === "Won"
+        ? "$" + parseFloat(b.stake * b.odds).toFixed(2)
+        : "$0.00"
+    }
+    <td>${b.datePlaced.slice(0, 10)}</td>
+    <td>${b.betStatus}</td>
+    </tr>`;
+
+      if (b.betStatus === "Won") {
+        profit += b.stake * (b.odds - 1);
+        won++;
+      } else if (b.betStatus === "Lost") {
+        profit -= b.stake;
+        lost++;
+      }
+    });
+
+  $("#bets-won").text(won);
+  $("#bets-lost").text(lost);
+  $("#win-percent").text(
+    parseFloat((won / (won + lost)) * 100).toFixed(2) + "%"
+  );
+  $("#profit").text("$" + parseFloat(profit).toFixed(2));
+  $("#table-data").html(tableMarkup);
+
+  const datatablesSimple = document.getElementById("datatablesSimple");
+  if (datatablesSimple) {
+    new simpleDatatables.DataTable(datatablesSimple);
+  }
 
   // Show add bet form
   $(".btn-add-bet").click(function (e) {
@@ -100,6 +127,8 @@ $(document).ready(function () {
     };
 
     await AJAX("/addBet", newBet);
+
+    location.reload();
   });
 });
 
