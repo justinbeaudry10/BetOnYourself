@@ -39,17 +39,22 @@ app.post("/login", (req, res) => {
   conn.connect();
 
   conn.query(
-    `SELECT * FROM users WHERE email="${req.body.email}" AND userPassword="${req.body.password}"`,
+    `SELECT * FROM users WHERE email="${req.body.email}"`,
     (err, rows, fields) => {
       if (err) res.send(err);
       else {
-        if (rows.length > 0) {
-          req.session.loggedin = true;
-          req.session.email = req.body.email;
-          res.sendFile(path.join(__dirname, "static/dashboard.html"));
-        } else {
-          res.send("Incorrect email or password!");
+        let resObj = {
+          correct: false,
+        };
+
+        for (r of rows) {
+          if (r.userPassword === req.body.password) {
+            req.session.loggedin = true;
+            req.session.email = req.body.email;
+            resObj.correct = true;
+          }
         }
+        res.json(resObj);
       }
       conn.end();
     }
@@ -102,10 +107,9 @@ app.post("/signup", (req, res) => {
   conn.query(
     `INSERT INTO users VALUES ("${req.body["email"]}", "${req.body["password"]}", "${req.body["firstName"]}", "${req.body["lastName"]}")`,
     (err, rows, fields) => {
-      if (err)
-        res.send("An account already exists with this email. Please sign in.");
+      if (err) res.json({ success: false });
       else {
-        res.send("Account created successfully");
+        res.json({ success: true });
         conn.end();
       }
     }
@@ -117,9 +121,9 @@ app.post("/addBet", (req, res) => {
   conn.connect();
 
   conn.query(
-    `INSERT INTO bets VALUES (null, "${req.body.sportsbook}", "${req.body.league}", "${req.body.event}", "${req.body.selection}", ${req.body.risk}, ${req.body.odds}, CURRENT_DATE, "${req.body.result}", "${req.session.email}")`,
+    `INSERT INTO bets VALUES (null, "${req.body.sportsbook}", "${req.body.league}", "${req.body.event}", "${req.body.selection}", ${req.body.risk}, ${req.body.odds}, "${req.body.date}", "${req.body.result}", "${req.session.email}")`,
     (err, rows, fields) => {
-      if (err) res.send(err);
+      if (err) console.log(err);
       else res.json({ result: "Bet added successfully!" });
     }
   );

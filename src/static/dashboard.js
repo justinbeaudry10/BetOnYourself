@@ -47,19 +47,19 @@ $(document).ready(function () {
     <td>${b.league}</td>
     <td>${b.betEvent}</td>
     <td>${b.selection}</td>
-    <td>${b.odds}</td>
+    <td>${parseFloat(b.odds).toFixed(2)}</td>
     <td>${"$" + parseFloat(b.stake).toFixed(2)}</td>
     <td>${
       b.betStatus === "Won"
         ? "$" + parseFloat(b.stake * b.odds).toFixed(2)
         : "$0.00"
     }
-    <td>${b.datePlaced.slice(0, 10)}</td>
+    <td>${b.datePlaced.split("T")[0]}</td>
     <td>${b.betStatus}</td>
     </tr>`;
 
       if (b.betStatus === "Won") {
-        profit += b.stake * (b.odds - 1);
+        profit += b.stake * b.odds - b.stake;
         won++;
       } else if (b.betStatus === "Lost") {
         profit -= b.stake;
@@ -102,17 +102,17 @@ $(document).ready(function () {
       case "American":
         let mult = +odds.slice(1, odds.length);
         if (odds[0] === "+") {
-          odds = (mult / 100 + 1).toFixed(2);
+          odds = (mult / 100 + 1).toFixed(3);
         } else if (odds[0] === "-") {
-          odds = (100 / mult + 1).toFixed(2);
+          odds = (100 / mult + 1).toFixed(3);
         }
         break;
       case "Decimal":
-        odds = (+odds).toFixed(2);
+        odds = (+odds).toFixed(3);
         break;
       case "Fractional":
         let nums = odds.split("/");
-        odds = (+nums[0] / +nums[1] + 1).toFixed(2);
+        odds = (+nums[0] / +nums[1] + 1).toFixed(3);
         break;
     }
 
@@ -122,6 +122,7 @@ $(document).ready(function () {
       event: $("#event").val(),
       selection: $("#selection").val(),
       odds: odds,
+      date: $("#date-placed").val(),
       risk: $("#risk").val(),
       result: $("#result option:selected").text(),
     };

@@ -3212,6 +3212,7 @@ textarea.is-invalid.dataTable-input {
   border-radius: 0.25rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  margin: 0.5rem 0;
 }
 @media (prefers-reduced-motion: reduce) {
   .btn {
@@ -12219,6 +12220,22 @@ body {
   background-color: var(--bs-teal);
 }
 
+.add-parlay-container {
+  margin-top: 0;
+}
+
+.btn-add-parlay {
+  width: 100%;
+  color: white;
+  background-color: black;
+}
+
+.btn-add-parlay:hover {
+  color: white;
+  font-weight: bold;
+  background-color: var(--bs-gray);
+}
+
 .won {
   background-color: rgb(39, 220, 166, 0.5);
 }
@@ -12237,8 +12254,31 @@ body {
   border: 1px solid black;
 }
 
+.add-form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.add-form > .btn {
+  color: white;
+  background-color: var(--bs-blue);
+  margin-bottom: 0;
+  border: 1px solid white;
+  border-radius: 1rem;
+}
+
+.add-form > .btn:hover {
+  font-weight: bold;
+}
+
 .dashboard-card {
   text-align: center;
   font-weight: bold;
   font-size: large;
+}
+
+.warning-text {
+  color: var(--bs-red);
 }

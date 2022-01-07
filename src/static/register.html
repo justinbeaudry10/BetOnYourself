@@ -16,7 +16,7 @@
       crossorigin="anonymous"
     ></script>
     <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-    <script defer src="register.js"></script>
+    <script type="module" defer src="register.js"></script>
   </head>
   <body class="bg-blue">
     <div id="layoutAuthentication">
@@ -34,11 +34,17 @@
                   <div class="card-body">
                     <form id="signup-form" action="/signup" method="post">
                       <div class="row mb-3">
+                        <div class="d-none" id="duplicate-email">
+                            <h6 class="warning-text">
+                              An account already exists with this email! Please sign in.
+                            </h6>
+                          </div>
                         <div class="col-md-6">
                           <div class="form-floating mb-3 mb-md-0">
                             <input
                               class="form-control"
                               name="firstName"
+                              id="firstName"
                               type="text"
                               placeholder="Enter your first name"
                               required
@@ -51,6 +57,7 @@
                             <input
                               class="form-control"
                               name="lastName"
+                              id="lastName"
                               type="text"
                               placeholder="Enter your last name"
                               required
@@ -63,6 +70,7 @@
                         <input
                           class="form-control"
                           name="email"
+                          id="email"
                           type="email"
                           placeholder="name@example.com"
                           required
@@ -70,6 +78,11 @@
                         <label for="email">Email address</label>
                       </div>
                       <div class="row mb-3">
+                        <div class="d-none" id="incorrect-msg">
+                            <h6 class="warning-text">
+                              Passwords don't match!
+                            </h6>
+                          </div>
                         <div class="col-md-6">
                           <div class="form-floating mb-3 mb-md-0">
                             <input
