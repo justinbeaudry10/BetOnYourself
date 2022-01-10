@@ -13,6 +13,11 @@ function toggleBetForm() {
   $(".add-bet").toggleClass("d-none");
 }
 
+function toggleParlayForm() {
+  $(".btn-add-parlay").toggleClass("d-none");
+  $(".add-parlay").toggleClass("d-none");
+}
+
 $(document).ready(function () {
   // Toggle the side navigation
   const sidebarToggle = document.body.querySelector("#sidebarToggle");
@@ -35,6 +40,7 @@ $(document).ready(function () {
 
   let won = 0;
   let lost = 0;
+  let cashedOut = 0;
   let profit = 0.0;
   let tableMarkup;
 
@@ -42,33 +48,46 @@ $(document).ready(function () {
     .slice()
     .reverse()
     .forEach(function (b) {
+      let curBet = b.betNo;
+      let leagues = "";
+      let events = "";
+      let selections = "";
+
+      data.legs.forEach(function (l) {
+        if (l.betNo === curBet) {
+          leagues += l.league + "<br/>";
+          events += l.betEvent + "<br/>";
+          selections += l.selection + "<br/>";
+        }
+      });
+
       tableMarkup += `<tr>
     <td>${b.book}</td>
-    <td>${b.league}</td>
-    <td>${b.betEvent}</td>
-    <td>${b.selection}</td>
+    <td>${leagues}</td>
+    <td>${events}</td>
+    <td>${selections}</td>
     <td>${parseFloat(b.odds).toFixed(2)}</td>
     <td>${"$" + parseFloat(b.stake).toFixed(2)}</td>
-    <td>${
-      b.betStatus === "Won"
-        ? "$" + parseFloat(b.stake * b.odds).toFixed(2)
-        : "$0.00"
-    }
+    <td>${"$" + b.returnAmt}
     <td>${b.datePlaced.split("T")[0]}</td>
     <td>${b.betStatus}</td>
     </tr>`;
 
       if (b.betStatus === "Won") {
-        profit += b.stake * b.odds - b.stake;
+        profit += b.returnAmt - b.stake;
         won++;
       } else if (b.betStatus === "Lost") {
         profit -= b.stake;
         lost++;
+      } else if (b.betStatus === "Cashed Out") {
+        profit += b.returnAmt - b.stake;
+        cashedOut++;
       }
     });
 
   $("#bets-won").text(won);
   $("#bets-lost").text(lost);
+  $("#cashed-out").text(cashedOut);
   $("#win-percent").text(
     parseFloat((won / (won + lost)) * 100).toFixed(2) + "%"
   );
@@ -86,10 +105,30 @@ $(document).ready(function () {
     toggleBetForm();
   });
 
+  // Show add parlay form
+  $(".btn-add-parlay").click(function (e) {
+    e.preventDefault();
+    toggleParlayForm();
+  });
+
+  $("#result").change(function () {
+    if ($(this).val() === "cashed-out") {
+      $(".cashed-out-input").removeClass("d-none");
+    } else {
+      $(".cashed-out-input").addClass("d-none");
+    }
+  });
+
   // Hide add bet form
   $(".btn-cancel").click(function (e) {
     e.preventDefault();
     toggleBetForm();
+  });
+
+  // Hide add parlay form
+  $(".btn-cancel-parlay").click(function (e) {
+    e.preventDefault();
+    toggleParlayForm();
   });
 
   // Add bet
@@ -116,6 +155,20 @@ $(document).ready(function () {
         break;
     }
 
+    let returnAmt;
+
+    switch ($("#result option:selected").val()) {
+      case "won":
+        returnAmt = $("#stake").val() * odds;
+        break;
+      case "lost":
+        returnAmt = 0.0;
+        break;
+      case "cashed-out":
+        returnAmt = $("#cash-out-amt").val();
+        break;
+    }
+
     let newBet = {
       sportsbook: $("#sportsbook").val(),
       league: $("#league option:selected").text(),
@@ -123,7 +176,8 @@ $(document).ready(function () {
       selection: $("#selection").val(),
       odds: odds,
       date: $("#date-placed").val(),
-      risk: $("#risk").val(),
+      stake: $("#stake").val(),
+      returnAmt: returnAmt,
       result: $("#result option:selected").text(),
     };
 

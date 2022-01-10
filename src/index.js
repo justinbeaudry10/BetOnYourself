@@ -66,6 +66,8 @@ app.get("/accountInfo", (req, res) => {
   conn.connect();
 
   let fullName;
+  let bets = [];
+  let legs = [];
 
   conn.query(
     `SELECT fName, lName FROM users WHERE email="${req.session.email}"`,
@@ -84,19 +86,31 @@ app.get("/accountInfo", (req, res) => {
     (err, rows, fields) => {
       if (err) console.log(err);
       else {
-        let bets = [];
-
         for (r of rows) {
           bets.push(r);
+        }
+      }
+    }
+  );
+
+  conn.query(
+    `SELECT * FROM legs WHERE betNo IN (SELECT betNo FROM bets WHERE bettor="${req.session.email}")`,
+    (err, rows, fields) => {
+      if (err) console.log(err);
+      else {
+        for (r of rows) {
+          legs.push(r);
         }
 
         res.json({
           fullName: fullName,
           bets: bets,
+          legs: legs,
         });
       }
     }
   );
+  conn.end();
 });
 
 // Inserts a new tuple into users table upon signup
@@ -121,11 +135,15 @@ app.post("/addBet", (req, res) => {
   conn.connect();
 
   conn.query(
-    `INSERT INTO bets VALUES (null, "${req.body.sportsbook}", "${req.body.league}", "${req.body.event}", "${req.body.selection}", ${req.body.risk}, ${req.body.odds}, "${req.body.date}", "${req.body.result}", "${req.session.email}")`,
+    `INSERT INTO bets VALUES (null, "${req.body.sportsbook}", ${req.body.stake}, ${req.body.odds}, "${req.body.date}", "${req.body.result}", ${req.body.returnAmt},"${req.session.email}")`,
     (err, rows, fields) => {
       if (err) console.log(err);
       else res.json({ result: "Bet added successfully!" });
     }
+  );
+
+  conn.query(
+    `INSERT INTO legs VALUES(null, "${req.body.league}", "${req.body.event}", "${req.body.selection}", (SELECT MAX(betNo) FROM bets))`
   );
 });
 

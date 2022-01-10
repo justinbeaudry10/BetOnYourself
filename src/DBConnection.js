@@ -2,10 +2,11 @@ const mysql = require("mysql"); //Creating an instance of mysql server and estab
 
 function newConnection() {
   let conn = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "password!",
-    database: "betOnYourself",
+    host: "db4free.net",
+    port: 3306,
+    user: "justinbeaudry",
+    password: "fvv23allstar",
+    database: "betonyourself",
   });
   return conn;
 }

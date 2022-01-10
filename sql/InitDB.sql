@@ -11,14 +11,21 @@ CREATE TABLE users (
 CREATE TABLE bets (
 	betNo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	book VARCHAR(50),
-    league VARCHAR(40),
-    betEvent VARCHAR(100),
-    selection VARCHAR(200),
 	stake DECIMAL(10, 2),
     odds DECIMAL(10, 3),
     datePlaced DATE,
     betStatus VARCHAR(10),
+    returnAmt DECIMAL(10, 2),
     bettor VARCHAR(100),
     FOREIGN KEY (bettor) REFERENCES users(email)
+);
+
+CREATE TABLE legs (
+	legNo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	league VARCHAR(40),
+    betEvent VARCHAR(100),
+    selection VARCHAR(200),
+    betNo INT NOT NULL,
+    FOREIGN KEY (betNo) REFERENCES bets(betNo)
 );
 

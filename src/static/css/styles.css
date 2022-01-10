@@ -12251,7 +12251,7 @@ body {
 .add-bet {
   background-color: var(--bs-gray-500);
   border-radius: 1rem;
-  border: 1px solid black;
+  margin: 0 10vw;
 }
 
 .add-form {

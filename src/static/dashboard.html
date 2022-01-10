@@ -87,7 +87,9 @@
                                         <option value="NBA">NBA</option>
                                         <option value="NFL">NFL</option>
                                         <option value="NHL">NHL</option>
+                                        <option value="MLS">MLS</option>
                                         <option value="UFC">UFC</option>
+                                        <option value="Other">Other</option>
                                     </select>
                                     <label for="event">Event</label>
                                     <input type="text" id="event" placeholder="GS @ TOR" required>
@@ -101,58 +103,70 @@
                                     </select>
                                     <label for="odds">Odds</label>
                                     <input value="" type="text" id="odds" required>
-                                    <label for="Risk">Risk</label>
-                                    <input value="" type="text" id="risk" step="0.01" placeholder="5.00" required>
+                                    <label for="stake">Stake</label>
+                                    <input value="" type="number" id="stake" step="0.01" placeholder="5.00" required>
                                     <label for="date">Date Placed</label>
                                     <input type="date" id="date-placed">
                                     <label for="result">Result</label>
                                     <select id="result" required>
                                         <option value="won">Won</option>
                                         <option value="lost">Lost</option>
+                                        <option value="cashed-out">Cashed Out</option>
+                                        <option value="unsettled">Unsettled</option>
                                     </select>
+                                    <label class="d-none cashed-out-input" for="cash-out-amt">Amount</label>
+                                    <input class="d-none cashed-out-input" value="" type="number" id="cash-out-amt" step="0.01" placeholder="5.00">                               
                                     <button class="btn btn-confirm-bet">Confirm</button>
                                     <button class="btn btn-cancel"">Cancel</button>
                                     </div>
                                 </form>
                                 <button class="btn btn-add-parlay">+ Add Parlay</button>
-                                <!-- <form class="add-parlay d-none">
+                                <form class="add-parlay d-none">
                                     <div class="add-form">
                                     <label for="sportsbook">Sportsbook</label>
                                     <input value="" type="text" id="sportsbook" placeholder="FanDuel" required>
-                                    <label for="league">League</label>
+                                    <button class="btn">Add Leg</button>
+                                    <button class="btn">Remove Leg</button>
+                                    <label>League</label>
                                     <select id="league" required>
                                         <option disabled selected value>---</option>
                                         <option value="MLB">MLB</option>
                                         <option value="NBA">NBA</option>
                                         <option value="NFL">NFL</option>
                                         <option value="NHL">NHL</option>
+                                        <option value="MLS">MLS</option>
                                         <option value="UFC">UFC</option>
+                                        <option value="Other">Other</option>
                                     </select>
-                                    <label for="event">Event</label>
+                                    <label>Event</label>
                                     <input type="text" id="event" placeholder="GS @ TOR" required>
-                                    <label for="selection">Selection</label>
+                                    <label>Selection</label>
                                     <input value="" type="text" id="selection" placeholder="Raptors +3.5" required>                        
-                                    <label for="style">Style</label>
+                                    <label>Style</label>
                                     <select id="style" required>
                                         <option value="American">American (+200)</option>
                                         <option value="Decimal">Decimal (2.00)</option>
                                         <option value="Fractional">Fractional (2/1)</option>
                                     </select>
-                                    <label for="odds">Odds</label>
+                                    <label>Odds</label>
                                     <input value="" type="text" id="odds" required>
-                                    <label for="risk">Risk</label>
-                                    <input value="" type="text" id="risk" step="0.01" placeholder="5.00" required>
-                                    <label for="date">Date Placed</label>
+                                    <label>Stake</label>
+                                    <input value="" type="number" id="stake" step="0.01" placeholder="5.00" required>
+                                    <label>Date Placed</label>
                                     <input type="date" id="date-placed">
-                                    <label for="result">Result</label>
+                                    <label>Result</label>
                                     <select id="result" required>
                                         <option value="won">Won</option>
                                         <option value="lost">Lost</option>
+                                        <option value="cashed-out">Cashed Out</option>
+                                        <option value="unsettled">Unsettled</option>
                                     </select>
-                                    <button class="btn btn-confirm-bet">Confirm</button>
-                                    <button class="btn btn-cancel"">Cancel</button>
-                                </div>
-                                </form> -->
+                                    <label class="d-none cashed-out-input" for="cash-out-amt">Amount</label>
+                                    <input class="d-none cashed-out-input" value="" type="number" id="cash-out-amt" step="0.01" placeholder="5.00">                               
+                                    <button class="btn btn-confirm-parlay">Confirm</button>
+                                    <button class="btn btn-cancel-parlay"">Cancel</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="row">
@@ -160,7 +174,7 @@
                                 <div class="card bg-green text-white mb-4">
                                     <div class="card-title">Bets Won</div>
                                     <div class="card-body dashboard-card" id="bets-won">
-                                        10
+                                        0
                                     </div>
                                 </div>
                             </div>
@@ -168,15 +182,15 @@
                                 <div class="card bg-red text-white mb-4">
                                     <div class="card-title">Bets Lost</div>
                                     <div class="card-body dashboard-card" id="bets-lost">
-                                        10
+                                        0
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-4 col-md-6">
-                                <div class="card bg-blue text-white mb-4">
+                                <div class="card bg-yellow text-white mb-4">
                                     <div class="card-title">Cashed Out</div>
-                                    <div class="card-body dashboard-card">
-                                        10
+                                    <div class="card-body dashboard-card" id="cashed-out">
+                                        0
                                     </div>
                                 </div>
                             </div>
@@ -186,7 +200,7 @@
                                 <div class="card bg-green text-white mb-4">
                                     <div class="card-title">Win %</div>
                                     <div class="card-body dashboard-card" id="win-percent">
-                                        10
+                                        0
                                     </div>
                                 </div>
                             </div>
@@ -194,15 +208,15 @@
                                 <div class="card bg-green text-white mb-4">
                                     <div class="card-title">Profit / Loss</div>
                                     <div class="card-body dashboard-card" id="profit">
-                                        10
+                                        0
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-4 col-md-6">
-                                <div class="card bg-black text-white mb-4">
+                                <div class="card bg-blue text-white mb-4">
                                     <div class="card-title">Parlays Won</div>
                                     <div class="card-body dashboard-card">
-                                        10
+                                    0
                                     </div>
                                 </div>
                             </div>
@@ -236,12 +250,12 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Sportsbook</th>
+                                            <th>Book</th>
                                             <th>League</th>
                                             <th>Event</th>
                                             <th>Selection</th>
                                             <th>Odds</th>
-                                            <th>Risk</th>
+                                            <th>Stake</th>
                                             <th>Return</th>
                                             <th>Date</th>
                                             <th>Result</th>
