@@ -69,7 +69,7 @@ $(document).ready(function () {
     <td>${selections}</td>
     <td>${parseFloat(b.odds).toFixed(2)}</td>
     <td>${"$" + parseFloat(b.stake).toFixed(2)}</td>
-    <td>${"$" + b.returnAmt}
+    <td>${"$" + parseFloat(b.returnAmt).toFixed(2)}
     <td>${b.datePlaced.split("T")[0]}</td>
     <td>${b.betStatus}</td>
     </tr>`;
@@ -113,7 +113,7 @@ $(document).ready(function () {
     curLegs = 1;
     $("#add-leg-container").append(`<div id="leg${curLegs}">
       <label>League</label>
-      <select id="league" required>
+      <select id="league${curLegs}" required>
           <option disabled selected value>---</option>
           <option value="MLB">MLB</option>
           <option value="NBA">NBA</option>
@@ -124,9 +124,9 @@ $(document).ready(function () {
           <option value="Other">Other</option>
       </select>
       <label>Event</label>
-      <input type="text" id="event" placeholder="GS @ TOR" required>
+      <input type="text" id="event${curLegs}" placeholder="GS @ TOR" required>
       <label>Selection</label>
-      <input value="" type="text" id="selection" placeholder="Raptors +3.5" required>
+      <input value="" type="text" id="selection${curLegs}" placeholder="Raptors +3.5" required>
     </div>`);
   });
 
@@ -207,13 +207,77 @@ $(document).ready(function () {
     location.reload();
   });
 
+  $(".btn-confirm-parlay").click(async function (e) {
+    e.preventDefault();
+    let odds = $("#parlay-odds").val();
+
+    // Converts odds to decimal style
+    switch ($("#parlay-style option:selected").val()) {
+      case "American":
+        let mult = +odds.slice(1, odds.length);
+        if (odds[0] === "+") {
+          odds = (mult / 100 + 1).toFixed(3);
+        } else if (odds[0] === "-") {
+          odds = (100 / mult + 1).toFixed(3);
+        }
+        break;
+      case "Decimal":
+        odds = (+odds).toFixed(3);
+        break;
+      case "Fractional":
+        let nums = odds.split("/");
+        odds = (+nums[0] / +nums[1] + 1).toFixed(3);
+        break;
+    }
+
+    let returnAmt;
+
+    switch ($("#parlay-result option:selected").val()) {
+      case "won":
+        returnAmt = $("#parlay-stake").val() * odds;
+        break;
+      case "lost":
+        returnAmt = 0.0;
+        break;
+      case "cashed-out":
+        returnAmt = $("#parlay-cash-out-amt").val();
+        break;
+    }
+
+    let leagues = [];
+    let events = [];
+    let selections = [];
+
+    for (let l = 1; l <= curLegs; l++) {
+      leagues.push($(`#league${l} option:selected`).text());
+      events.push($(`#event${l}`).val());
+      selections.push($(`#selection${l}`).val());
+    }
+
+    let newBet = {
+      sportsbook: $("#parlay-sportsbook").val(),
+      league: leagues.join("<br/>"),
+      event: events.join("<br/>"),
+      selection: "<b>Parlay</b><br/>" + selections.join("<br/>"),
+      odds: odds,
+      date: $("#parlay-date-placed").val(),
+      stake: $("#parlay-stake").val(),
+      returnAmt: returnAmt,
+      result: $("#parlay-result option:selected").text(),
+    };
+
+    await AJAX("/addBet", newBet);
+
+    location.reload();
+  });
+
   $(".add-leg-btn").click(function (e) {
     e.preventDefault();
 
     curLegs++;
     let legInput = `<div id="leg${curLegs}">
       <label>League</label>
-      <select id="league" required>
+      <select id="league${curLegs}" required>
           <option disabled selected value>---</option>
           <option value="MLB">MLB</option>
           <option value="NBA">NBA</option>
@@ -224,9 +288,9 @@ $(document).ready(function () {
           <option value="Other">Other</option>
       </select>
       <label>Event</label>
-      <input type="text" id="event" placeholder="GS @ TOR" required>
+      <input type="text" id="event${curLegs}" placeholder="GS @ TOR" required>
       <label>Selection</label>
-      <input value="" type="text" id="selection" placeholder="Raptors +3.5" required>
+      <input value="" type="text" id="selection${curLegs}" placeholder="Raptors +3.5" required>
     </div>`;
 
     $("#add-leg-container").append(legInput);
