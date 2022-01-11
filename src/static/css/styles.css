@@ -12282,3 +12282,13 @@ body {
 .warning-text {
   color: var(--bs-red);
 }
+
+#add-leg-container {
+  margin-top: 0.5rem;
+}
+
+.delete {
+  background-color: var(--bs-red);
+  color: white;
+  border-radius: 1rem;
+}

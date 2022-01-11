@@ -89,6 +89,8 @@
                                         <option value="NHL">NHL</option>
                                         <option value="MLS">MLS</option>
                                         <option value="UFC">UFC</option>
+                                        <option value="NCAAB">NCAAB</option>
+                                        <option value="NCAAF">NCAAF</option>
                                         <option value="Other">Other</option>
                                     </select>
                                     <label for="event">Event</label>
@@ -125,8 +127,8 @@
                                     <div class="add-form">
                                     <label>Sportsbook</label>
                                     <input value="" type="text" id="parlay-sportsbook" placeholder="FanDuel" required>
-                                    <button class="btn add-leg-btn">Add Leg</button>
-                                    <button class="btn rem-leg-btn">Remove Leg</button>
+                                    <button class="btn add-leg-btn">+ Add Leg</button>
+                                    <button class="btn rem-leg-btn">- Remove Leg</button>
                                     <div id="add-leg-container"></div>                       
                                     <label>Style</label>
                                     <select id="parlay-style" required>
@@ -245,7 +247,7 @@
                                             <th>Return</th>
                                             <th>Date</th>
                                             <th>Result</th>
-                                            <th>Edit</th>
+                                            <th>Delete</th>
                                         </tr>
                                     </thead>
                                     <tbody id="table-data">

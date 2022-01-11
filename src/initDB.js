@@ -45,7 +45,7 @@ conn.query(
     betEvent VARCHAR(100),
     selection VARCHAR(200),
     betNo INT NOT NULL,
-    FOREIGN KEY (betNo) REFERENCES bets(betNo)
+    FOREIGN KEY (betNo) REFERENCES bets(betNo) ON DELETE CASCADE
 );`,
   (err, rows, fields) => {
     if (err) console.log(err);

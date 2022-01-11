@@ -73,6 +73,7 @@ $(document).ready(function () {
     <td>${"$" + parseFloat(b.returnAmt).toFixed(2)}
     <td>${b.datePlaced.split("T")[0]}</td>
     <td>${b.betStatus}</td>
+    <td><button class="btn delete" id="delete${b.betNo}">Delete</button></td>
     </tr>`;
 
       if (b.betStatus === "Won") {
@@ -124,6 +125,8 @@ $(document).ready(function () {
           <option value="NHL">NHL</option>
           <option value="MLS">MLS</option>
           <option value="UFC">UFC</option>
+          <option value="NCAAB">NCAAB</option>
+          <option value="NCAAF">NCAAF</option>
           <option value="Other">Other</option>
       </select>
       <label>Event</label>
@@ -159,6 +162,7 @@ $(document).ready(function () {
   $(".btn-confirm-bet").click(async function (e) {
     e.preventDefault();
 
+    // Check that all fields are filled
     if (
       $("#sportsbook").val() !== "" &&
       $("#league option:selected").text() !== "---" &&
@@ -191,6 +195,7 @@ $(document).ready(function () {
 
       let returnAmt;
 
+      // Calculating return amount
       switch ($("#result option:selected").val()) {
         case "won":
           returnAmt = $("#stake").val() * odds;
@@ -202,6 +207,7 @@ $(document).ready(function () {
           returnAmt = 0.0;
       }
 
+      // Creating object to send to server
       let newBet = {
         sportsbook: $("#sportsbook").val(),
         league: $("#league option:selected").text(),
@@ -268,8 +274,10 @@ $(document).ready(function () {
       let selections = [];
 
       for (let l = 1; l <= curLegs; l++) {
-        leagues.push($(`#league${l} option:selected`).text());
-        events.push($(`#event${l}`).val());
+        if (!leagues.includes($(`#league${l} option:selected`).text()))
+          leagues.push($(`#league${l} option:selected`).text());
+        if (!events.includes($(`#event${l}`).val()))
+          events.push($(`#event${l}`).val());
         selections.push($(`#selection${l}`).val());
       }
 
@@ -305,6 +313,8 @@ $(document).ready(function () {
           <option value="NHL">NHL</option>
           <option value="MLS">MLS</option>
           <option value="UFC">UFC</option>
+          <option value="NCAAB">NCAAB</option>
+          <option value="NCAAF">NCAAF</option>
           <option value="Other">Other</option>
       </select>
       <label>Event</label>
@@ -323,5 +333,12 @@ $(document).ready(function () {
       $(`#leg${curLegs}`).remove();
       curLegs--;
     }
+  });
+
+  $(".delete").click(async function (e) {
+    e.preventDefault();
+
+    await AJAX("/deleteBet", { betNo: $(this).attr("id").slice(6) });
+    location.reload();
   });
 });

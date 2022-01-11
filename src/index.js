@@ -147,4 +147,17 @@ app.post("/addBet", (req, res) => {
   );
 });
 
+app.post("/deleteBet", (req, res) => {
+  let conn = newConnection();
+  conn.connect();
+
+  conn.query(
+    `DELETE FROM bets WHERE betNo=${req.body.betNo}`,
+    (err, rows, fields) => {
+      if (err) console.log(err);
+      else res.json({ result: "Bet deleted successfully!" });
+    }
+  );
+});
+
 app.listen(3000);
