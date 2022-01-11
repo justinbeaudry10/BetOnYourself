@@ -41,6 +41,7 @@ $(document).ready(function () {
   let won = 0;
   let lost = 0;
   let cashedOut = 0;
+  let parlays = 0;
   let profit = 0.0;
   let tableMarkup;
   let curLegs = 1;
@@ -76,6 +77,7 @@ $(document).ready(function () {
 
       if (b.betStatus === "Won") {
         profit += b.returnAmt - b.stake;
+        if (selections.includes("Parlay")) parlays++;
         won++;
       } else if (b.betStatus === "Lost") {
         profit -= b.stake;
@@ -91,6 +93,7 @@ $(document).ready(function () {
   $("#bets-won").text(won);
   $("#bets-lost").text(lost);
   $("#cashed-out").text(cashedOut);
+  $("#parlays").text(parlays);
   $("#win-percent").text(won + lost > 0 ? percent + "%" : "N/A");
   $("#profit").text("$" + parseFloat(profit).toFixed(2));
   $("#table-data").html(tableMarkup);
@@ -155,120 +158,137 @@ $(document).ready(function () {
   // Add bet
   $(".btn-confirm-bet").click(async function (e) {
     e.preventDefault();
-    let odds = $("#odds").val();
 
-    // Converts odds to decimal style
-    switch ($("#style option:selected").val()) {
-      case "American":
-        let mult = +odds.slice(1, odds.length);
-        if (odds[0] === "+") {
-          odds = (mult / 100 + 1).toFixed(3);
-        } else if (odds[0] === "-") {
-          odds = (100 / mult + 1).toFixed(3);
-        }
-        break;
-      case "Decimal":
-        odds = (+odds).toFixed(3);
-        break;
-      case "Fractional":
-        let nums = odds.split("/");
-        odds = (+nums[0] / +nums[1] + 1).toFixed(3);
-        break;
+    if (
+      $("#sportsbook").val() !== "" &&
+      $("#league option:selected").text() !== "---" &&
+      $("#event").val() !== "" &&
+      $("#selection").val() !== "" &&
+      $("#odds").val() !== "" &&
+      $("#date-placed").val() !== "" &&
+      $("#stake").val() !== ""
+    ) {
+      let odds = $("#odds").val();
+
+      // Converts odds to decimal style
+      switch ($("#style option:selected").val()) {
+        case "American":
+          let mult = +odds.slice(1, odds.length);
+          if (odds[0] === "+") {
+            odds = (mult / 100 + 1).toFixed(3);
+          } else if (odds[0] === "-") {
+            odds = (100 / mult + 1).toFixed(3);
+          }
+          break;
+        case "Decimal":
+          odds = (+odds).toFixed(3);
+          break;
+        case "Fractional":
+          let nums = odds.split("/");
+          odds = (+nums[0] / +nums[1] + 1).toFixed(3);
+          break;
+      }
+
+      let returnAmt;
+
+      switch ($("#result option:selected").val()) {
+        case "won":
+          returnAmt = $("#stake").val() * odds;
+          break;
+        case "cashed-out":
+          returnAmt = $("#cash-out-amt").val();
+          break;
+        default:
+          returnAmt = 0.0;
+      }
+
+      let newBet = {
+        sportsbook: $("#sportsbook").val(),
+        league: $("#league option:selected").text(),
+        event: $("#event").val(),
+        selection: $("#selection").val(),
+        odds: odds,
+        date: $("#date-placed").val(),
+        stake: $("#stake").val(),
+        returnAmt: returnAmt,
+        result: $("#result option:selected").text(),
+      };
+
+      await AJAX("/addBet", newBet);
+
+      location.reload();
     }
-
-    let returnAmt;
-
-    switch ($("#result option:selected").val()) {
-      case "won":
-        returnAmt = $("#stake").val() * odds;
-        break;
-      case "lost":
-        returnAmt = 0.0;
-        break;
-      case "cashed-out":
-        returnAmt = $("#cash-out-amt").val();
-        break;
-    }
-
-    let newBet = {
-      sportsbook: $("#sportsbook").val(),
-      league: $("#league option:selected").text(),
-      event: $("#event").val(),
-      selection: $("#selection").val(),
-      odds: odds,
-      date: $("#date-placed").val(),
-      stake: $("#stake").val(),
-      returnAmt: returnAmt,
-      result: $("#result option:selected").text(),
-    };
-
-    await AJAX("/addBet", newBet);
-
-    location.reload();
   });
 
   $(".btn-confirm-parlay").click(async function (e) {
     e.preventDefault();
-    let odds = $("#parlay-odds").val();
+    if (
+      $("#parlay-sportsbook").val() !== "" &&
+      $("#parlay-odds").val() !== "" &&
+      $("#parlay-date-placed").val() !== "" &&
+      $("#parlay-stake").val() !== ""
+    ) {
+      let odds = $("#parlay-odds").val();
 
-    // Converts odds to decimal style
-    switch ($("#parlay-style option:selected").val()) {
-      case "American":
-        let mult = +odds.slice(1, odds.length);
-        if (odds[0] === "+") {
-          odds = (mult / 100 + 1).toFixed(3);
-        } else if (odds[0] === "-") {
-          odds = (100 / mult + 1).toFixed(3);
-        }
-        break;
-      case "Decimal":
-        odds = (+odds).toFixed(3);
-        break;
-      case "Fractional":
-        let nums = odds.split("/");
-        odds = (+nums[0] / +nums[1] + 1).toFixed(3);
-        break;
+      // Converts odds to decimal style
+      switch ($("#parlay-style option:selected").val()) {
+        case "American":
+          let mult = +odds.slice(1, odds.length);
+          if (odds[0] === "+") {
+            odds = (mult / 100 + 1).toFixed(3);
+          } else if (odds[0] === "-") {
+            odds = (100 / mult + 1).toFixed(3);
+          }
+          break;
+        case "Decimal":
+          odds = (+odds).toFixed(3);
+          break;
+        case "Fractional":
+          let nums = odds.split("/");
+          odds = (+nums[0] / +nums[1] + 1).toFixed(3);
+          break;
+      }
+
+      let returnAmt;
+
+      switch ($("#parlay-result option:selected").val()) {
+        case "won":
+          returnAmt = $("#parlay-stake").val() * odds;
+          break;
+        case "lost":
+          returnAmt = 0.0;
+          break;
+        case "cashed-out":
+          returnAmt = $("#parlay-cash-out-amt").val();
+          break;
+      }
+
+      let leagues = [];
+      let events = [];
+      let selections = [];
+
+      for (let l = 1; l <= curLegs; l++) {
+        leagues.push($(`#league${l} option:selected`).text());
+        events.push($(`#event${l}`).val());
+        selections.push($(`#selection${l}`).val());
+      }
+
+      let newBet = {
+        sportsbook: $("#parlay-sportsbook").val(),
+        league: leagues.join("<br/>"),
+        event: events.join("<br/>"),
+        selection: "<b>Parlay</b><br/>" + selections.join("<br/>"),
+        odds: odds,
+        date: $("#parlay-date-placed").val(),
+        stake: $("#parlay-stake").val(),
+        returnAmt: returnAmt,
+        result: $("#parlay-result option:selected").text(),
+      };
+
+      await AJAX("/addBet", newBet);
+
+      location.reload();
     }
-
-    let returnAmt;
-
-    switch ($("#parlay-result option:selected").val()) {
-      case "won":
-        returnAmt = $("#parlay-stake").val() * odds;
-        break;
-      case "lost":
-        returnAmt = 0.0;
-        break;
-      case "cashed-out":
-        returnAmt = $("#parlay-cash-out-amt").val();
-        break;
-    }
-
-    let leagues = [];
-    let events = [];
-    let selections = [];
-
-    for (let l = 1; l <= curLegs; l++) {
-      leagues.push($(`#league${l} option:selected`).text());
-      events.push($(`#event${l}`).val());
-      selections.push($(`#selection${l}`).val());
-    }
-
-    let newBet = {
-      sportsbook: $("#parlay-sportsbook").val(),
-      league: leagues.join("<br/>"),
-      event: events.join("<br/>"),
-      selection: "<b>Parlay</b><br/>" + selections.join("<br/>"),
-      odds: odds,
-      date: $("#parlay-date-placed").val(),
-      stake: $("#parlay-stake").val(),
-      returnAmt: returnAmt,
-      result: $("#parlay-result option:selected").text(),
-    };
-
-    await AJAX("/addBet", newBet);
-
-    location.reload();
   });
 
   $(".add-leg-btn").click(function (e) {
