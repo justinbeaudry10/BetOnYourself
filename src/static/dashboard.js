@@ -43,6 +43,7 @@ $(document).ready(function () {
   let cashedOut = 0;
   let profit = 0.0;
   let tableMarkup;
+  let curLegs = 1;
 
   data.bets
     .slice()
@@ -85,12 +86,12 @@ $(document).ready(function () {
       }
     });
 
+  let percent = parseFloat((won / (won + lost)) * 100).toFixed(2);
+
   $("#bets-won").text(won);
   $("#bets-lost").text(lost);
   $("#cashed-out").text(cashedOut);
-  $("#win-percent").text(
-    parseFloat((won / (won + lost)) * 100).toFixed(2) + "%"
-  );
+  $("#win-percent").text(won + lost > 0 ? percent + "%" : "N/A");
   $("#profit").text("$" + parseFloat(profit).toFixed(2));
   $("#table-data").html(tableMarkup);
 
@@ -109,6 +110,24 @@ $(document).ready(function () {
   $(".btn-add-parlay").click(function (e) {
     e.preventDefault();
     toggleParlayForm();
+    curLegs = 1;
+    $("#add-leg-container").append(`<div id="leg${curLegs}">
+      <label>League</label>
+      <select id="league" required>
+          <option disabled selected value>---</option>
+          <option value="MLB">MLB</option>
+          <option value="NBA">NBA</option>
+          <option value="NFL">NFL</option>
+          <option value="NHL">NHL</option>
+          <option value="MLS">MLS</option>
+          <option value="UFC">UFC</option>
+          <option value="Other">Other</option>
+      </select>
+      <label>Event</label>
+      <input type="text" id="event" placeholder="GS @ TOR" required>
+      <label>Selection</label>
+      <input value="" type="text" id="selection" placeholder="Raptors +3.5" required>
+    </div>`);
   });
 
   $("#result").change(function () {
@@ -129,6 +148,8 @@ $(document).ready(function () {
   $(".btn-cancel-parlay").click(function (e) {
     e.preventDefault();
     toggleParlayForm();
+    curLegs = 1;
+    $("#add-leg-container").html("");
   });
 
   // Add bet
@@ -185,120 +206,38 @@ $(document).ready(function () {
 
     location.reload();
   });
-});
 
-/*
-window.addEventListener("DOMContentLoaded", (event) => {
-  // Data
-
-  const betsData = [];
-
-  // Elements
-
-  const btnAddBet = document.querySelector(".btn-add-bet");
-  const btnConfirm = document.querySelector(".btn-confirm-bet");
-  const btnCancel = document.querySelector(".btn-cancel");
-  const addBetForm = document.querySelector(".add-bet");
-  const sportsbook = document.querySelector("#sportsbook");
-  const league = document.querySelector("#league");
-  const sportEvent = document.querySelector("#event");
-  const selection = document.querySelector("#selection");
-  const oddsStyle = document.querySelector("#style");
-  const odds = document.querySelector("#odds");
-  const risk = document.querySelector("#risk");
-  const recentBetsTable = document.querySelector("#datatablesSimple");
-  let statusSelect = document.getElementsByClassName("status-select");
-
-  // Functions
-
-  function addNewBet(bet) {
-    let markup = `
-    <tr class="${bet.status}">
-      <td>${bet.book}</td>
-      <td>${bet.league}</td>
-      <td>${bet.event}</td>
-      <td>${bet.selection}</td>
-      <td>${bet.odds}</td>
-      <td>${bet.risk}</td>
-      <td></td>
-      <td></td>
-      <td>
-        <select class="status-select">
-          <option value="unsettled">Unsettled</option>
-          <option value="won">Won</option>
-          <option value="lost">Lost</option>
-          <option value="void">Void</option>
-          <option value="cashedOut">Cashed Out</option>
-        </select>
-      </td>
-    </tr>
-    `;
-    recentBetsTable.insertAdjacentHTML("afterbegin", markup);
-    updateStatusArr();
-  }
-
-  // Event Listeners
-
-  // Keeps an updated array of rows in the table and adds event listeners to all of them to check their status
-  function updateStatusArr() {
-    let statusArr = Array.from(statusSelect);
-
-    statusArr.forEach((bet) => {
-      bet.addEventListener("change", (e) => {
-        e.target.parentElement.parentElement.className = e.target.value;
-      });
-    });
-  }
-  updateStatusArr(); // Populates array with initial values already in table
-
-  btnAddBet.addEventListener("click", (e) => {
-    addBetForm.classList.remove("d-none");
-    btnAddBet.classList.add("d-none");
-  });
-
-  btnCancel.addEventListener("click", (e) => {
+  $(".add-leg-btn").click(function (e) {
     e.preventDefault();
-    addBetForm.classList.add("d-none");
-    btnAddBet.classList.remove("d-none");
+
+    curLegs++;
+    let legInput = `<div id="leg${curLegs}">
+      <label>League</label>
+      <select id="league" required>
+          <option disabled selected value>---</option>
+          <option value="MLB">MLB</option>
+          <option value="NBA">NBA</option>
+          <option value="NFL">NFL</option>
+          <option value="NHL">NHL</option>
+          <option value="MLS">MLS</option>
+          <option value="UFC">UFC</option>
+          <option value="Other">Other</option>
+      </select>
+      <label>Event</label>
+      <input type="text" id="event" placeholder="GS @ TOR" required>
+      <label>Selection</label>
+      <input value="" type="text" id="selection" placeholder="Raptors +3.5" required>
+    </div>`;
+
+    $("#add-leg-container").append(legInput);
   });
 
-  btnConfirm.addEventListener("click", (e) => {
+  $(".rem-leg-btn").click(function (e) {
     e.preventDefault();
-    let curBook = sportsbook.value;
-    let curLeague = league.options[league.selectedIndex].value;
-    let curEvent = sportEvent.value;
-    let curSelection = selection.value;
-    let curStyle = style.options[style.selectedIndex].value;
-    let curOdds = odds.value;
-    let curRisk = risk.value;
-    const newBet = new Bet(
-      curBook,
-      curLeague,
-      curEvent,
-      curSelection,
-      curStyle,
-      curOdds,
-      curRisk
-    );
-    addNewBet(newBet);
-    addBetContainer.classList.add("d-none");
-  });
 
-  // Toggle the side navigation
-  const sidebarToggle = document.body.querySelector("#sidebarToggle");
-  if (sidebarToggle) {
-    // Uncomment Below to persist sidebar toggle between refreshes
-    // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-    //     document.body.classList.toggle('sb-sidenav-toggled');
-    // }
-    sidebarToggle.addEventListener("click", (event) => {
-      event.preventDefault();
-      document.body.classList.toggle("sb-sidenav-toggled");
-      localStorage.setItem(
-        "sb|sidebar-toggle",
-        document.body.classList.contains("sb-sidenav-toggled")
-      );
-    });
-  }
+    if (curLegs > 1) {
+      $(`#leg${curLegs}`).remove();
+      curLegs--;
+    }
+  });
 });
-*/
