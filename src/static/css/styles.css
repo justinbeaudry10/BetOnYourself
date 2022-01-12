@@ -12288,7 +12288,13 @@ body {
 }
 
 .delete {
-  background-color: var(--bs-red);
+  width: 75%;
+  background-color: black;
   color: white;
   border-radius: 1rem;
+}
+
+.delete:hover {
+  font-weight: bold;
+  color: white;
 }

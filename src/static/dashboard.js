@@ -63,7 +63,24 @@ $(document).ready(function () {
         }
       });
 
-      tableMarkup += `<tr>
+      let status;
+
+      if (b.betStatus === "Won") {
+        profit += b.returnAmt - b.stake;
+        if (selections.includes("Parlay")) parlays++;
+        won++;
+        status = "won";
+      } else if (b.betStatus === "Lost") {
+        profit -= b.stake;
+        lost++;
+        status = "lost";
+      } else if (b.betStatus === "Cashed Out") {
+        profit += b.returnAmt - b.stake;
+        cashedOut++;
+        status = "cashed-out";
+      }
+
+      tableMarkup += `<tr class="${status}">
     <td>${b.book}</td>
     <td>${leagues}</td>
     <td>${events}</td>
@@ -75,18 +92,6 @@ $(document).ready(function () {
     <td>${b.betStatus}</td>
     <td><button class="btn delete" id="delete${b.betNo}">Delete</button></td>
     </tr>`;
-
-      if (b.betStatus === "Won") {
-        profit += b.returnAmt - b.stake;
-        if (selections.includes("Parlay")) parlays++;
-        won++;
-      } else if (b.betStatus === "Lost") {
-        profit -= b.stake;
-        lost++;
-      } else if (b.betStatus === "Cashed Out") {
-        profit += b.returnAmt - b.stake;
-        cashedOut++;
-      }
     });
 
   let percent = parseFloat((won / (won + lost)) * 100).toFixed(2);
