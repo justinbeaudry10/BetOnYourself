@@ -6,6 +6,8 @@ const session = require("express-session");
 //const router = express.Router();
 const app = express();
 
+app.set("view engine", "ejs");
+
 // Serving static files, with default page as login.html
 app.use(express.static("static", { index: "login.html" }));
 
@@ -160,4 +162,4 @@ app.post("/deleteBet", (req, res) => {
   );
 });
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
