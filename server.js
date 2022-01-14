@@ -1,15 +1,21 @@
 const express = require("express");
 const newConnection = require("./DBConnection");
 const path = require("path");
-const cookieParser = require("cookie-parser");
 const session = require("express-session");
 //const router = express.Router();
 const app = express();
+const expressLayouts = require("express-ejs-layouts");
+
+const indexRouter = require("./routes/index");
 
 app.set("view engine", "ejs");
-
+app.set("views", __dirname + "/views");
+app.set("layout", "layouts/layout");
+app.use(expressLayouts);
 // Serving static files, with default page as login.html
-app.use(express.static("static", { index: "login.html" }));
+app.use(express.static("static"));
+
+app.use("/", indexRouter);
 
 app.use(
   session({
@@ -18,8 +24,6 @@ app.use(
     saveUninitialized: true,
   })
 );
-
-app.use(cookieParser());
 
 // Needed for POST method with forms
 app.use(
