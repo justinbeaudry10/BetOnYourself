@@ -11,7 +11,7 @@ $(document).ready(function () {
 
     let result = await AJAX("/login", loginInfo);
     result.correct === true
-      ? (window.location.href = "dashboard.html")
+      ? (window.location.href = "/dashboard")
       : $("#incorrect-msg").removeClass("d-none");
   });
 });

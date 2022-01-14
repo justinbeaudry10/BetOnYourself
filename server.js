@@ -12,7 +12,6 @@ app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.set("layout", "layouts/layout");
 app.use(expressLayouts);
-// Serving static files, with default page as login.html
 app.use(express.static("static"));
 
 app.use("/", indexRouter);
@@ -35,11 +34,6 @@ app.use(
 // Needed for POST method with JSON objects
 app.use(express.json());
 
-// Gets the register page
-app.get("/register", (req, res) => {
-  res.sendFile(path.join(__dirname, "static/register.html"));
-});
-
 app.post("/login", (req, res) => {
   let conn = newConnection();
   conn.connect();
@@ -58,13 +52,19 @@ app.post("/login", (req, res) => {
             req.session.loggedin = true;
             req.session.email = req.body.email;
             resObj.correct = true;
+            res.send(resObj);
+          } else {
+            res.send(resObj);
           }
         }
-        res.json(resObj);
       }
       conn.end();
     }
   );
+});
+
+app.get("/dashboard", (req, res) => {
+  res.render("dashboard");
 });
 
 app.get("/accountInfo", (req, res) => {
@@ -129,7 +129,7 @@ app.post("/signup", (req, res) => {
     (err, rows, fields) => {
       if (err) res.json({ success: false });
       else {
-        res.json({ success: true });
+        res.redirect("/");
         conn.end();
       }
     }

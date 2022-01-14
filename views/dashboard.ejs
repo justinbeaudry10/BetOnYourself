@@ -1,0 +1,216 @@
+<%- include('./partials/header.ejs') %>
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <a class="nav-link" href="/dashboard">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    <!-- <a class="nav-link" href="tables.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        My Bets
+                    </a>
+                    <a class="nav-link" href="charts.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        Analysis
+                    </a> -->
+                </div>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">Logged in as:</div>
+                <div id="current-user"></div>
+            </div>
+        </nav>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Dashboard</h1>
+                <div class="row">                            
+                    <div class="my-3 add-bet-container">
+                        <button class="btn btn-add-bet">+ Add Single Bet</button>
+                        <form class="add-bet d-none">
+                            <div class="add-form">
+                            <label for="sportsbook">Sportsbook</label>
+                            <input value="" type="text" id="sportsbook" placeholder="FanDuel" required>
+                            <label for="league">League</label>
+                            <select id="league" required>
+                                <option disabled selected value>---</option>
+                                <option value="MLB">MLB</option>
+                                <option value="NBA">NBA</option>
+                                <option value="NFL">NFL</option>
+                                <option value="NHL">NHL</option>
+                                <option value="MLS">MLS</option>
+                                <option value="UFC">UFC</option>
+                                <option value="NCAAB">NCAAB</option>
+                                <option value="NCAAF">NCAAF</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <label for="event">Event</label>
+                            <input type="text" id="event" placeholder="GS @ TOR" required>
+                            <label for="selection">Selection</label>
+                            <input value="" type="text" id="selection" placeholder="Raptors +3.5" required>                        
+                            <label for="style">Style</label>
+                            <select id="style" required>
+                                <option value="American">American (+200)</option>
+                                <option value="Decimal">Decimal (2.00)</option>
+                                <option value="Fractional">Fractional (2/1)</option>
+                            </select>
+                            <label for="odds">Odds</label>
+                            <input value="" type="text" id="odds" required>
+                            <label for="stake">Stake</label>
+                            <input value="" type="number" id="stake" step="0.01" placeholder="5.00" required>
+                            <label for="date">Date Placed</label>
+                            <input type="date" id="date-placed">
+                            <label for="result">Result</label>
+                            <select id="result" required>
+                                <option value="won">Won</option>
+                                <option value="lost">Lost</option>
+                                <option value="cashed-out">Cashed Out</option>
+                                <option value="unsettled">Unsettled</option>
+                            </select>
+                            <label class="d-none cashed-out-input" for="cash-out-amt">Amount</label>
+                            <input class="d-none cashed-out-input" value="" type="number" id="cash-out-amt" step="0.01" placeholder="5.00">                               
+                            <button class="btn btn-confirm-bet">Confirm</button>
+                            <button class="btn btn-cancel"">Cancel</button>
+                            </div>
+                        </form>
+                        <button class="btn btn-add-parlay">+ Add Parlay</button>
+                        <form class="add-parlay d-none">
+                            <div class="add-form">
+                            <label>Sportsbook</label>
+                            <input value="" type="text" id="parlay-sportsbook" placeholder="FanDuel" required>
+                            <button class="btn add-leg-btn">+ Add Leg</button>
+                            <button class="btn rem-leg-btn">- Remove Leg</button>
+                            <div id="add-leg-container"></div>                       
+                            <label>Style</label>
+                            <select id="parlay-style" required>
+                                <option value="American">American (+200)</option>
+                                <option value="Decimal">Decimal (2.00)</option>
+                                <option value="Fractional">Fractional (2/1)</option>
+                            </select>
+                            <label>Odds</label>
+                            <input value="" type="text" id="parlay-odds" required>
+                            <label>Stake</label>
+                            <input value="" type="number" id="parlay-stake" step="0.01" placeholder="5.00" required>
+                            <label>Date Placed</label>
+                            <input type="date" id="parlay-date-placed">
+                            <label>Result</label>
+                            <select id="parlay-result" required>
+                                <option value="won">Won</option>
+                                <option value="lost">Lost</option>
+                                <option value="cashed-out">Cashed Out</option>
+                                <option value="unsettled">Unsettled</option>
+                            </select>
+                            <label class="d-none cashed-out-input" for="cash-out-amt">Amount</label>
+                            <input class="d-none cashed-out-input" value="" type="number" id="parlay-cash-out-amt" step="0.01" placeholder="5.00">                               
+                            <button class="btn btn-confirm-parlay">Confirm</button>
+                            <button class="btn btn-cancel-parlay"">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4 col-md-6">
+                        <div class="card bg-green text-white mb-4">
+                            <div class="card-title">Bets Won</div>
+                            <div class="card-body dashboard-card" id="bets-won">
+                                0
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="card bg-red text-white mb-4">
+                            <div class="card-title">Bets Lost</div>
+                            <div class="card-body dashboard-card" id="bets-lost">
+                                0
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="card bg-yellow text-white mb-4">
+                            <div class="card-title">Cashed Out</div>
+                            <div class="card-body dashboard-card" id="cashed-out">
+                                0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4 col-md-6">
+                        <div class="card bg-green text-white mb-4">
+                            <div class="card-title">Win %</div>
+                            <div class="card-body dashboard-card" id="win-percent">
+                                0
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="card bg-green text-white mb-4">
+                            <div class="card-title">Profit / Loss</div>
+                            <div class="card-body dashboard-card" id="profit">
+                                0
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="card bg-blue text-white mb-4">
+                            <div class="card-title">Parlays Won</div>
+                            <div class="card-body dashboard-card" id="parlays">
+                            0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-none">
+                    <div class="col-xl-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-area me-1"></i>
+                                Area Chart Example
+                            </div>
+                            <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 d-none">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-bar me-1"></i>
+                                Bar Chart Example
+                            </div>
+                            <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Recent Bets
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                                <tr>
+                                    <th>Book</th>
+                                    <th>League(s)</th>
+                                    <th>Event(s)</th>
+                                    <th>Selection(s)</th>
+                                    <th>Odds</th>
+                                    <th>Stake</th>
+                                    <th>Return</th>
+                                    <th>Date</th>
+                                    <th>Result</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-data">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
