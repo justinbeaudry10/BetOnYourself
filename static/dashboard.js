@@ -19,6 +19,13 @@ function toggleParlayForm() {
 }
 
 $(document).ready(function () {
+  if (
+    window.location.pathname !== "/" &&
+    window.location.pathname !== "/register" &&
+    !data.fullName
+  )
+    window.location.href = "/";
+
   // Toggle the side navigation
   const sidebarToggle = document.body.querySelector("#sidebarToggle");
   if (sidebarToggle) {
@@ -41,7 +48,6 @@ $(document).ready(function () {
   let won = 0;
   let lost = 0;
   let cashedOut = 0;
-  let parlays = 0;
   let profit = 0.0;
   let tableMarkup;
   let curLegs = 1;
@@ -67,7 +73,6 @@ $(document).ready(function () {
 
       if (b.betStatus === "Won") {
         profit += b.returnAmt - b.stake;
-        if (selections.includes("Parlay")) parlays++;
         won++;
         status = "won";
       } else if (b.betStatus === "Lost") {
@@ -95,11 +100,12 @@ $(document).ready(function () {
     });
 
   let percent = parseFloat((won / (won + lost)) * 100).toFixed(2);
+  let avgProfit = parseFloat(profit / data.legs.length).toFixed(2);
 
   $("#bets-won").text(won);
   $("#bets-lost").text(lost);
   $("#cashed-out").text(cashedOut);
-  $("#parlays").text(parlays);
+  $("#avg-profit").text("$" + avgProfit);
   $("#win-percent").text(won + lost > 0 ? percent + "%" : "N/A");
   $("#profit").text("$" + parseFloat(profit).toFixed(2));
   $("#table-data").html(tableMarkup);
